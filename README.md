@@ -37,7 +37,6 @@
 	</pre>
 	
 ## JSONP API
-	<p><pre>
 	Sjax.debug = true; // 开启调试模式
 	
 	Sjax.get({
@@ -48,4 +47,3 @@
 		scope	  // 回调函数执行上下文
 		timestamp // 是否加时间戳
 	})
-	</pre></p>
