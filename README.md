@@ -25,20 +25,19 @@
 + 执行ajax请求, 返回JSON
 	<pre>
 	Ajax.json(url,{
-			...
+		...
 	})
 	</pre>
 	
 + 执行ajax请求, 返回XML
 	<pre>
 	Ajax.xml(url,{
-			...
+		...
 	})
 	</pre>
 	
 ## JSONP API
 	Sjax.debug = true; // 开启调试模式
-	
 	Sjax.get({
 		url	      // 请求url 
 		param	  // 请求参数 (键值对字符串或js对象)
