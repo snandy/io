@@ -90,89 +90,88 @@ var target = {
 	},
 	
 	get: function(options) {
-	
-		if (!options || !options.url) return;
+		if (!options || !options.url) return
 		
-		var me = this, 
-		url = options.url,
-		param = options.param,
-		success = options.success || NOOP,
-		failure = options.failure || NOOP,
-		scope = options.scope || global,
-		timestamp = options.timestamp,
-		callbackName = generateRandomName();
+		var me      = this, 
+			url     = options.url,
+			param   = options.param,
+			success = options.success || NOOP,
+			failure = options.failure || NOOP,
+			scope   = options.scope || global,
+			timestamp = options.timestamp,
+			callbackName = generateRandomName()
 		
 		if (param && typeof param == 'object') {
-			param = paramsToString(param);
+			param = paramsToString(param)
 		}
-		var script = doc.createElement('script');
+		var script = doc.createElement('script')
 		
 		function callback(isSucc) {
 			if (isSucc) {
-				done = true;
-				me.log('Request success!');
+				done = true
+				me.log('Request success!')
 			} else {
-				failure.call(scope);
-				me.log('Request failed!');
+				failure.call(scope)
+				me.log('Request failed!')
 			}
 			// Handle memory leak in IE
-			script.onload = script.onerror = script.onreadystatechange = null;
+			script.onload = script.onerror = script.onreadystatechange = null
 			if ( head && script.parentNode ) {
-				head.removeChild(script);
-				script = null;
-				global[callbackName] = undefined;
-				me.log("Garbage collecting!");
+				head.removeChild(script)
+				script = null
+				global[callbackName] = undefined
+				me.log("Garbage collecting!")
 			}
 		}
 		
 		function fixOnerror() {
 			setTimeout(function() {
 				if (!done) {
-					callback();
+					callback()
 				}
-			}, timeout);
+			}, timeout)
 		}
 		if (ie678) {
 			script.onreadystatechange = function() {
-				var readyState = this.readyState;
+				var readyState = this.readyState
 				if (!done && (readyState == 'loaded' || readyState == 'complete')) {
-					callback(true);
+					callback(true)
 				}
 			}
 			
 		} else {
 			script.onload = function() {
-				callback(true);
+				callback(true)
 			}
 			script.onerror = function() {
-				callback();
+				callback()
 			}
 			if (opera) {
-				fixOnerror();
+				fixOnerror()
 			}
 		}
 		if (param) {
-			url += '?' + param;
+			url += '?' + param
 		}
 		if (timestamp) {
 			if (param) {
-				url += '&ts=';
+				url += '&ts='
 			} else {
 				url += '?ts='
 			}
-			url += (new Date).getTime();
+			url += (new Date).getTime()
 		}
 		
 		global[callbackName] = function(json) {
-			success.call(scope, json);
+			success.call(scope, json)
 		}
 		
-		url += '&callback=' + callbackName;
-		this.log("Getting JSONP data");
-		script.src = url;
-		head.insertBefore(script, head.firstChild);
+		url += '&callback=' + callbackName
+		this.log("Getting JSONP data")
+		script.src = url
+		head.insertBefore(script, head.firstChild)
 	}
 };
 
-return target;
+return target
 }(this);
