@@ -5,7 +5,7 @@
 	Ajax.request(url, {
 		async   是否异步 true(默认)
 		method  请求方式 POST or GET(默认)
-		type	  数据格式 text(默认) or xml or json
+		type	数据格式 text(默认) or xml or json
 		encode  请求的编码 UTF-8(默认)
 		timeout 请求超时时间 0(默认)
 		data	请求参数 (字符串或json)
