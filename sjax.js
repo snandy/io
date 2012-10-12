@@ -34,6 +34,7 @@
  *	failure   // 请求失败回调函数
  *	scope	  // 回调函数执行上下文
  *	timestamp // 是否加时间戳
+ *  jsonpCallback // 指定回调函数名称，不使用随机函数名，用在缓存时，此时timestamp应该设为false
  * });
  * 
  * 后台接受一个callback参数，为响应函数
@@ -99,7 +100,7 @@ var target = {
 			failure = options.failure || NOOP,
 			scope   = options.scope || global,
 			timestamp = options.timestamp,
-			callbackName = generateRandomName()
+			callbackName = options.jsonpCallback || generateRandomName()
 		
 		if (param && typeof param == 'object') {
 			param = paramsToString(param)
