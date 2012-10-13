@@ -66,15 +66,15 @@ function paramsToString(obj) {
 //Thanks to Kevin Hakanson
 //http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/873856#873856
 function generateRandomName() {
-	var uuid = '', s = [], i = 0, hexDigits = "0123456789ABCDEF"
+	var uuid = '', s = [], i = 0, hexDigits = '0123456789ABCDEF'
 	for (i = 0; i < 32; i += 1) {
 		s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
 	}
 	
-	s[12] = "4"  // bits 12-15 of the time_hi_and_version field to 0010
+	s[12] = '4'  // bits 12-15 of the time_hi_and_version field to 0010
 	s[16] = hexDigits.substr((s[16] & 0x3) | 0x8, 1)  // bits 6-7 of the clock_seq_hi_and_reserved to 01
 
-	uuid = 'snandy_jsonp_' + s.join("")
+	uuid = 'snandy_jsonp_' + s.join('')
 	return uuid
 }
 
@@ -168,7 +168,7 @@ var target = {
 		}
 		
 		url += '&callback=' + callbackName
-		this.log("Getting JSONP data")
+		this.log('Getting JSONP data')
 		script.src = url
 		head.insertBefore(script, head.firstChild)
 	}
