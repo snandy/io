@@ -1,31 +1,30 @@
 <!DOCTYPE HTML>
 <html> 
 <head> 
-	<meta charset="utf-8"> 
-	<title>sjax_0.5.js by snandy</title>
-	<script src="sjax_0.5.js"></script>
+	<meta charset="utf-8">
+	<title>JSONP API by snandy</title>
+	<script src="../sjax.js"></script>
 </head> 
 <body>
 <input type="button" value="Get Name 1" onclick="clk1()"/>
 <input type="button" value="Get Name 2" onclick="clk2()"/>
 <script type="text/javascript">
-
-Sjax.debug = 0;
-function clk1(){
-	Sjax.get({
-		url : 'http://localhost:9000/www/servlet/json',
-		param : {name:'33',age:44},
-		success : function(json){console.log(json)},
-		failure : function(){console.log('error!');}
-	});
-}
-function clk2(){
-	Sjax.get({
-		url : 'jsonp66.js',
-		success : function(){console.log(jsonp.name)},
-		failure : function(){console.log('error');}
-	});
-}
+	Sjax.debug = 0;
+	function clk1(){
+		Sjax.get({
+			url : 'http://localhost:9000/www/servlet/json',
+			param : {name:'33',age:44},
+			success : function(json){console.log(json)},
+			failure : function(){console.log('error!');}
+		});
+	}
+	function clk2(){
+		Sjax.get({
+			url : 'jsonp66.js',
+			success : function(){console.log(jsonp.name)},
+			failure : function(){console.log('error');}
+		});
+	}
 </script>
 </body>
 </html>

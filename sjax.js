@@ -53,7 +53,7 @@ function paramsToString(obj) {
 	var a = [], key, val
 	for (key in obj) {
 		val = obj[key]
-		if (val.constructor == Array) {
+		if (val.constructor === Array) {
 			for(var i = 0, len = val.length; i < len; i++) {
 				a.push(key + '=' + encodeURIComponent(val[i]))
 			}
@@ -68,36 +68,34 @@ function paramsToString(obj) {
 function generateRandomName() {
 	var uuid = '', s = [], i = 0, hexDigits = '0123456789ABCDEF'
 	for (i = 0; i < 32; i += 1) {
-		s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+		s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1)
 	}
-	
-	s[12] = '4'  // bits 12-15 of the time_hi_and_version field to 0010
-	s[16] = hexDigits.substr((s[16] & 0x3) | 0x8, 1)  // bits 6-7 of the clock_seq_hi_and_reserved to 01
-
+	// bits 12-15 of the time_hi_and_version field to 0010
+	s[12] = '4'
+	// bits 6-7 of the clock_seq_hi_and_reserved to 01	
+	s[16] = hexDigits.substr((s[16] & 0x3) | 0x8, 1)
 	uuid = 'snandy_jsonp_' + s.join('')
 	return uuid
 }
 
-function NOOP() {}
+function noop() {}
 
 var target = {
-	
 	debug: false,
-	
 	log: function(msg) {
 		if (global.console && this.debug) {
-			global.console.log(msg);
+			global.console.log(msg)
 		}
 	},
-	
 	get: function(options) {
-		if (!options || !options.url) return
-		
+		if (!options || !options.url) {
+			return
+		}
 		var me      = this, 
 			url     = options.url,
 			param   = options.param,
-			success = options.success || NOOP,
-			failure = options.failure || NOOP,
+			success = options.success || noop,
+			failure = options.failure || noop,
 			scope   = options.scope || global,
 			timestamp = options.timestamp,
 			callbackName = options.jsonpCallback || generateRandomName()
@@ -172,7 +170,7 @@ var target = {
 		script.src = url
 		head.insertBefore(script, head.firstChild)
 	}
-};
+}
 
 return target
 }(this);

@@ -46,22 +46,22 @@ Ajax = function(window) {
 var createXHR = window.XMLHttpRequest ?
 	function() {
 		try{
-			return new window.XMLHttpRequest();
-		} catch(e) {}
+			return new window.XMLHttpRequest()
+		} catch(e){}
 	} :
 	function() {
 		try{
-			return new window.ActiveXObject('Microsoft.XMLHTTP');
-		} catch(e) {}
+			return new window.ActiveXObject('Microsoft.XMLHTTP')
+		} catch(e){}
 	}
 
-function NOOP(){}
+function noop(){}
 
-function _serialize(obj) {
+function serialize(obj) {
 	var a = [], key, val
 	for (key in obj) {
 		val = obj[key]
-		if (val.constructor == Array) {
+		if (val.constructor === Array) {
 			for (var i = 0, len = val.length; i<len; i++) {
 				a.push(key + '=' + encodeURIComponent( val[i]) )
 			}
@@ -73,25 +73,29 @@ function _serialize(obj) {
 	return a.join('&')
 }
 
-function request(url,opt) {
+function request(url, opt) {
+	if (typeof url === 'object') {
+		opt = url
+		url = opt.url
+	}
 	var xhr, isTimeout, timer, opt = opt || {}
 	var async   = opt.async !== false,
-		method  = opt.method	|| 'GET',
-		type	= opt.type	    || 'text',
-		encode  = opt.encode	|| 'UTF-8',
-		timeout = opt.timeout   || 0,
+		method  = opt.method  || 'GET',
+		type	= opt.type	  || 'text',
+		encode  = opt.encode  || 'UTF-8',
+		timeout = opt.timeout || 0,
 		data	= opt.data,
 		scope   = opt.scope,
-		success = opt.success   || NOOP,
-		failure = opt.failure   || NOOP
+		success = opt.success || noop,
+		failure = opt.failure || noop
 		
 	method  = method.toUpperCase()
-		
-	if (data && typeof data == 'object') {//对象转换成字符串键值对
-		data = _serialize(data);
+	// 对象转换成字符串键值对
+	if (data && typeof data === 'object') {
+		data = serialize(data);
 	}
-	if (method == 'GET' && data) {
-		url += (url.indexOf('?') == -1 ? '?' : '&') + data
+	if (method === 'GET' && data) {
+		url += (url.indexOf('?') === -1 ? '?' : '&') + data
 	}
 	
 	xhr = createXHR()
@@ -102,16 +106,17 @@ function request(url,opt) {
 	isTimeout = false
 	if (async && timeout>0) {
 		timer = setTimeout(function() {
-			isTimeout = true //先给isTimeout赋值，不能先调用abort
+			// 先给isTimeout赋值，不能先调用abort
+			isTimeout = true
 			xhr.abort()
 		}, timeout)
 	}
 	xhr.onreadystatechange = function() {
-		if (xhr.readyState == 4) {
+		if (xhr.readyState === 4) {
 			if (isTimeout) {
 				failure(xhr,'request timeout')
 			} else {
-				_onStateChange(xhr, type, success, failure, scope)
+				onStateChange(xhr, type, success, failure, scope)
 				clearTimeout(timer)
 			}
 		}
@@ -124,7 +129,7 @@ function request(url,opt) {
 	return xhr
 }
 
-function _onStateChange(xhr, type, success, failure, scope) {
+function onStateChange(xhr, type, success, failure, scope) {
 	var s = xhr.status, result
 	if (s>= 200 && s < 300) {
 		switch (type) {
@@ -159,10 +164,10 @@ function _onStateChange(xhr, type, success, failure, scope) {
 }
 
 return (function() {
-	var Ajax = {request:request}, types = ['text','json','xml']
+	var Ajax = {request: request}, types = ['text','json','xml']
 	for (var i = 0, len = types.length; i<len; i++) {
 		Ajax[ types[i] ] = function(i) {
-			return function(url,opt) {
+			return function(url, opt) {
 				opt = opt || {}
 				opt.type = types[i]
 				return request(url, opt)
