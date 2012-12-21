@@ -55,7 +55,7 @@ var createXHR = window.XMLHttpRequest ?
 		} catch(e){}
 	}
 
-function noop(){}
+function noop() {}
 
 function serialize(obj) {
 	var a = [], key, val
@@ -92,7 +92,7 @@ function request(url, opt) {
 	method  = method.toUpperCase()
 	// 对象转换成字符串键值对
 	if (data && typeof data === 'object') {
-		data = serialize(data);
+		data = serialize(data)
 	}
 	if (method === 'GET' && data) {
 		url += (url.indexOf('?') === -1 ? '?' : '&') + data
