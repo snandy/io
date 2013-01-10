@@ -41,7 +41,7 @@
  * });
  */
 
-Ajax = function(window) {
+Ajax = function(window, undefined) {
 
 var createXHR = window.XMLHttpRequest ?
 	function() {
