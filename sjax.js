@@ -47,12 +47,12 @@ var ie678 = !-[1,],
 	opera = global.opera,
 	doc = global.document,
 	head = doc.head || doc.getElementsByTagName('head')[0],
-	timeout = 3000, done = false
+	timeout = 3000, done = false;
 
 function paramsToString(obj) {
 	var a = [], key, val
 	for (key in obj) {
-		val = obj[key]
+		val = obj[key];
 		if (val.constructor === Array) {
 			for(var i = 0, len = val.length; i < len; i++) {
 				a.push(key + '=' + encodeURIComponent(val[i]))
@@ -71,10 +71,10 @@ function generateRandomName() {
 		s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1)
 	}
 	// bits 12-15 of the time_hi_and_version field to 0010
-	s[12] = '4'
+	s[12] = '4';
 	// bits 6-7 of the clock_seq_hi_and_reserved to 01	
-	s[16] = hexDigits.substr((s[16] & 0x3) | 0x8, 1)
-	uuid = 'snandy_jsonp_' + s.join('')
+	s[16] = hexDigits.substr((s[16] & 0x3) | 0x8, 1);
+	uuid = 'snandy_jsonp_' + s.join('');
 	return uuid
 }
 
@@ -92,34 +92,34 @@ var target = {
 			return
 		}
 		var me      = this, 
-			url     = options.url,
+			url     = options.url + '?',
 			param   = options.param,
 			success = options.success || noop,
 			failure = options.failure || noop,
 			scope   = options.scope || global,
 			timestamp = options.timestamp,
-			callbackName = options.jsonpCallback || generateRandomName()
+			callbackName = options.jsonpCallback || generateRandomName();
 		
 		if (param && typeof param === 'object') {
 			param = paramsToString(param)
 		}
-		var script = doc.createElement('script')
+		var script = doc.createElement('script');
 		
 		function callback(isSucc) {
 			if (isSucc) {
-				done = true
-				me.log('Request success!')
+				done = true;
+				me.log('Request success!');
 			} else {
-				failure.call(scope)
-				me.log('Request failed!')
+				failure.call(scope);
+				me.log('Request failed!');
 			}
 			// Handle memory leak in IE
-			script.onload = script.onerror = script.onreadystatechange = null
+			script.onload = script.onerror = script.onreadystatechange = null;
 			if ( head && script.parentNode ) {
-				head.removeChild(script)
-				script = null
-				global[callbackName] = undefined
-				me.log("Garbage collecting!")
+				head.removeChild(script);
+				script = null;
+				global[callbackName] = undefined;
+				me.log("Garbage collecting!");
 			}
 		}
 		
@@ -149,26 +149,24 @@ var target = {
 				fixOnerror()
 			}
 		}
+		
+		url += 'callback=' + callbackName;
+		
 		if (param) {
-			url += '?' + param
+			url += '&' + param;
 		}
 		if (timestamp) {
-			if (param) {
-				url += '&ts='
-			} else {
-				url += '?ts='
-			}
-			url += (new Date).getTime()
+			url += '&ts=';
+			url += (new Date).getTime();
 		}
 		
 		global[callbackName] = function(json) {
-			success.call(scope, json)
-		}
+			success.call(scope, json);
+		};
 		
-		url += '&callback=' + callbackName
-		this.log('Getting JSONP data')
-		script.src = url
-		head.insertBefore(script, head.firstChild)
+		this.log('Getting JSONP data');
+		script.src = url;
+		head.insertBefore(script, head.firstChild);
 	}
 }
 
