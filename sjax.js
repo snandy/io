@@ -34,6 +34,7 @@
  *	failure   // 请求失败回调函数
  *	scope	  // 回调函数执行上下文
  *	timestamp // 是否加时间戳
+ *  jsonpName // 传给后台的参数名，默认是callback
  *  jsonpCallback // 指定回调函数名称，不使用随机函数名，用在缓存时，此时timestamp应该设为false
  * });
  * 
@@ -50,32 +51,32 @@ var ie678 = !-[1,],
 	timeout = 3000, done = false;
 
 function paramsToString(obj) {
-	var a = [], key, val
+	var a = [], key, val;
 	for (key in obj) {
 		val = obj[key];
 		if (val.constructor === Array) {
 			for(var i = 0, len = val.length; i < len; i++) {
-				a.push(key + '=' + encodeURIComponent(val[i]))
+				a.push(key + '=' + encodeURIComponent(val[i]));
 			}
 		} else {
-			a.push(key + '=' + encodeURIComponent(val))
+			a.push(key + '=' + encodeURIComponent(val));
 		}
 	}
-	return a.join('&')
+	return a.join('&');
 }
 //Thanks to Kevin Hakanson
 //http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/873856#873856
 function generateRandomName() {
 	var uuid = '', s = [], i = 0, hexDigits = '0123456789ABCDEF'
 	for (i = 0; i < 32; i++) {
-		s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1)
+		s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
 	}
 	// bits 12-15 of the time_hi_and_version field to 0010
 	s[12] = '4';
 	// bits 6-7 of the clock_seq_hi_and_reserved to 01	
 	s[16] = hexDigits.substr((s[16] & 0x3) | 0x8, 1);
 	uuid = 'snandy_jsonp_' + s.join('');
-	return uuid
+	return uuid;
 }
 
 function noop() {}
@@ -98,6 +99,7 @@ var target = {
 			failure = options.failure || noop,
 			scope   = options.scope || global,
 			timestamp = options.timestamp,
+			jsonpName = options.jsonpName || 'callback',
 			callbackName = options.jsonpCallback || generateRandomName();
 		
 		if (param && typeof param === 'object') {
@@ -122,7 +124,6 @@ var target = {
 				me.log("Garbage collecting!");
 			}
 		}
-		
 		function fixOnerror() {
 			setTimeout(function() {
 				if (!done) {
@@ -132,7 +133,7 @@ var target = {
 		}
 		if (ie678) {
 			script.onreadystatechange = function() {
-				var readyState = this.readyState
+				var readyState = this.readyState;
 				if (!done && (readyState == 'loaded' || readyState == 'complete')) {
 					callback(true)
 				}
@@ -150,7 +151,7 @@ var target = {
 			}
 		}
 		
-		url += 'callback=' + callbackName;
+		url += jsonpName + '=' + callbackName;
 		
 		if (param) {
 			url += '&' + param;
