@@ -67,7 +67,7 @@ function paramsToString(obj) {
 //Thanks to Kevin Hakanson
 //http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/873856#873856
 function generateRandomName() {
-	var uuid = '', s = [], i = 0, hexDigits = '0123456789ABCDEF'
+	var uuid = '', s = [], i = 0, hexDigits = '0123456789ABCDEF';
 	for (i = 0; i < 32; i++) {
 		s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
 	}
@@ -85,15 +85,16 @@ var target = {
 	debug: false,
 	log: function(msg) {
 		if (global.console && this.debug) {
-			global.console.log(msg)
+			global.console.log(msg);
 		}
 	},
-	get: function(options) {
-		if (!options || !options.url) {
-			return
+	get: function(url, options) {
+		if (typeof url === 'object') {
+			options = url;
+			url = options.url;
 		}
 		var me      = this, 
-			url     = options.url + '?',
+			url     = url + '?',
 			param   = options.param,
 			success = options.success || noop,
 			failure = options.failure || noop,
@@ -103,7 +104,7 @@ var target = {
 			callbackName = options.jsonpCallback || generateRandomName();
 		
 		if (param && typeof param === 'object') {
-			param = paramsToString(param)
+			param = paramsToString(param);
 		}
 		var script = doc.createElement('script');
 		
@@ -127,27 +128,27 @@ var target = {
 		function fixOnerror() {
 			setTimeout(function() {
 				if (!done) {
-					callback()
+					callback();
 				}
-			}, timeout)
+			}, timeout);
 		}
 		if (ie678) {
 			script.onreadystatechange = function() {
 				var readyState = this.readyState;
 				if (!done && (readyState == 'loaded' || readyState == 'complete')) {
-					callback(true)
+					callback(true);
 				}
-			}
+			};
 			
 		} else {
 			script.onload = function() {
-				callback(true)
-			}
+				callback(true);
+			};
 			script.onerror = function() {
-				callback()
-			}
+				callback();
+			};
 			if (opera) {
-				fixOnerror()
+				fixOnerror();
 			}
 		}
 		
@@ -171,5 +172,5 @@ var target = {
 	}
 }
 
-return target
+return target;
 }(this);

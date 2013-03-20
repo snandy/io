@@ -2,7 +2,7 @@
  * 	FileUpload.init(input, {
  *		// url: '/web/servlet/FileUpload',
  *		url: '/upload',
- *		refile: /(?:png|jpg|jpeg|gif)/,
+ *		fileType: /(?:png|jpg|jpeg|gif)/,
  *		params: {
  *			name: 'aaa',
  *			age: 33
@@ -45,7 +45,7 @@ var FileUpload = {
 		// 允许一次上传的文件数量
 		this.maximum  = options.maximum || 5
 		// 允许上传的文件类型 正则
-		this.refile = options.refile || /\S/
+		this.fileType = options.fileType || /\S/
 		// 进度函数
 		this.progress = options.progress || noop
 		// 成功函数
@@ -98,7 +98,7 @@ var FileUpload = {
 			if (file.size > this.maximize) {
 				a1.push(file)
 			}
-			if (!this.refile.test(file.type)) {
+			if (!this.fileType.test(file.type)) {
 				a2.push(file)
 			}
 		}
