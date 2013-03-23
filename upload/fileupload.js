@@ -55,7 +55,7 @@ var FileUpload = {
 
 		this.checkMaximize = options.checkMaximize || noop
 
-		this.checkMaximun = options.checkMaximun || noop
+		this.checkMaximun  = options.checkMaximun || noop
 
 		this.checkFileType = options.checkFileType || noop
 
