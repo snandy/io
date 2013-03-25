@@ -30,6 +30,7 @@
  * Sjax.get({
  *	url	      // 请求url 
  *	param	  // 请求参数 (键值对字符串或js对象)
+ *  charset   // utf-8 页面于js文件charset不同时可显示的设置，某些请求结果中文乱码问题
  *	success   // 请求成功回调函数
  *	failure   // 请求失败回调函数
  *	scope	  // 回调函数执行上下文
@@ -96,6 +97,7 @@ var target = {
 		var me      = this, 
 			url     = url + '?',
 			param   = options.param,
+			charset = options.charset,
 			success = options.success || noop,
 			failure = options.failure || noop,
 			scope   = options.scope || global,
@@ -154,6 +156,9 @@ var target = {
 		
 		url += jsonpName + '=' + callbackName;
 		
+		if (charset) {
+			script.charset = charset;
+		}
 		if (param) {
 			url += '&' + param;
 		}
