@@ -76,7 +76,7 @@ function generateRandomName() {
 	s[12] = '4';
 	// bits 6-7 of the clock_seq_hi_and_reserved to 01	
 	s[16] = hexDigits.substr((s[16] & 0x3) | 0x8, 1);
-	uuid = 'snandy_jsonp_' + s.join('');
+	uuid = 'jsonp_' + s.join('');
 	return uuid;
 }
 
