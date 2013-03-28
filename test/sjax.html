@@ -4,15 +4,17 @@
 	<meta charset="utf-8">
 	<title>JSONP API by snandy</title>
 	<script src="../sjax.js"></script>
+	<script src="cookie.js"></script>
 </head> 
 <body>
 <input type="button" value="Get Name 1" onclick="clk1()"/>
 <input type="button" value="Get Name 2" onclick="clk2()"/>
 <script type="text/javascript">
+	cookie.set('name', 'snandy')
 	Sjax.debug = 0;
 	function clk1(){
 		Sjax.get({
-			url : 'http://localhost:9000/www/servlet/json',
+			url : 'http://pp.sohu.com/upload',
 			param : {name:'33',age:44},
 			success : function(json){console.log(json)},
 			failure : function(){console.log('error!');}

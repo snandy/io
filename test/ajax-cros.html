@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html> 
+<head> 
+	<meta charset="utf-8"> 
+	<title>Ajax API by snandy</title>
+	<script src="../ajax.js"></script>
+</head> 
+<body>
+<input type="button" value="cross domain request" onclick="clk1()"/>
+<input type="button" value="cross domain request wiht credential" onclick="clk2()"/>
+
+<!-- 后台使用Java Servlet测试，见cros.java -->
+<script type="text/javascript">
+	function clk1() {
+		Ajax.json('http://localhost:8081/web/servlet/Cors', {
+			success: function(str) {
+				console.log(str)
+			}
+		})
+	}
+	function clk2() {
+		Ajax.json('http://localhost:8081/web/servlet/Cors', {
+			credential: true,
+			success: function(str) {
+				console.log(str)
+			}
+		})
+	}	
+</script>
+</body>
+</html>
+
