@@ -105,7 +105,7 @@ function request(url, opt) {
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState === 4) {
 			if (isTimeout) {
-				failure(xhr,'request timeout')
+				failure(xhr, 'request timeout')
 			} else {
 				onStateChange(xhr, type, success, failure, scope)
 				clearTimeout(timer)

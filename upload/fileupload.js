@@ -3,6 +3,7 @@
  *		// url: '/web/servlet/FileUpload',
  *		url: '/upload',
  *		fileType: /(?:png|jpg|jpeg|gif)/,
+ * 		credential: 跨域请求时是否带证书(默认false，不带http认证信息如cookie) 
  *		params: {
  *			name: 'aaa',
  *			age: 33
@@ -22,7 +23,7 @@
  *
  */
  
-FileUpload = function(){
+FileUpload = function() {
 	
 function noop() {}
 
@@ -33,7 +34,6 @@ var FileUpload = {
 			return
 		}
 		options || (options = {})
-
 		// 上传按钮
 		this.input = input
 		// 上传url
@@ -46,6 +46,8 @@ var FileUpload = {
 		this.maximum  = options.maximum || 5
 		// 允许上传的文件类型 正则
 		this.fileType = options.fileType || /\S/
+		// 跨域带证书
+		this.credential = options.credential
 		// 进度函数
 		this.progress = options.progress || noop
 		// 成功函数
@@ -74,15 +76,15 @@ var FileUpload = {
 				me.checkFileType(filter.types)
 				return
 			}
-
 			// 不要一个循环一次全部提交，间隔100ms，性能考虑，一次提交N多请求容易alort
 			var timer = setInterval(sched, 100)
 			function sched() {
 				file = files[i]
-				me.request(file)
 				if (!file) {
 					clearInterval(timer)
 					input.value = ''
+				} else {
+					me.request(file)
 				}
 				i++
 			}
@@ -90,11 +92,12 @@ var FileUpload = {
 		return this
 	},
 	preprocess: function(files) {
-		var file, len = files.length
-		var a1 = [], a2 = []
+		var file,
+			a1 = [],
+			a2 = [],
+			len = files.length
 		for (var i=0; i<len; i++) {
 			file = files[i]
-			console.log(typeof file.size)
 			if (file.size > this.maximize) {
 				a1.push(file)
 			}
@@ -105,7 +108,9 @@ var FileUpload = {
 		return {sizes: a1, types: a2}
 	},
 	request: function(file) {
-		var me = this, params = me.params, xhr = new XMLHttpRequest()
+		var me = this, 
+			params = me.params,
+			xhr = new XMLHttpRequest()
 		
 		xhr.addEventListener('progress', function(e) {
 			if (e.lengthComputable) {
@@ -124,21 +129,21 @@ var FileUpload = {
 		xhr.addEventListener('error', function(e) {
 			me.failure()
 		}, false)
-
+		
+		if (this.credential) {
+			xhr.withCredentials = true
+		}
 		xhr.open('POST', me.url, true)
-
-		var data = new FormData()
+		
+		var key, data = new FormData()
 		data.append('file', file)
 		// params
-		for (var key in params) {
+		for (key in params) {
 			data.append(key, params[key])
 		}
-		
 		xhr.send(data)
-
 	}
 }
 
 return FileUpload
-	
 }();
