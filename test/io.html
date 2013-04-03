@@ -4,11 +4,15 @@
 	<meta charset="utf-8"> 
 	<title>Ajax API by snandy</title>
 	<script src="../io.js"></script>
+	<script src="lib/selector.js"></script>
 </head> 
 <body>
 <input type="button" value="Get Name 1" onclick="clk1()"/>
 <input type="button" value="Get Name 2" onclick="clk2()"/>
 <input type="button" value="JSONP" onclick="clk3()"/>
+<br/>
+<input type="file" multiple />
+
 <script type="text/javascript">
 
 function clk1() {
@@ -39,6 +43,18 @@ function clk3() {
 		}
 	})
 }
+
+var url = 'http://localhost:8081/web/servlet/Cors'
+$('input[type=file]')[0].onchange = function() {
+	var files = this.files;
+	if (files.length) {
+		var xhr = new XMLHttpRequest()
+		xhr.withCredentials = true
+		xhr.open('POST', url)
+		xhr.send(files[0])
+	}
+}
+
 </script>
 </body>
 </html>
