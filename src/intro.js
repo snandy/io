@@ -17,7 +17,7 @@ function forEach(obj, iterator, context) {
 }
 
 // IO.isArray, IO.isBoolean, ...
-forEach(['Array', 'Boolean', 'Function', 'Object', 'String', 'Number', 'RegExp'], function(name) {
+forEach(['Array', 'Boolean', 'Function', 'Object', 'String', 'Number'], function(name) {
 	IO['is' + name] = function(obj) {
 		return toString.call(obj) === '[object ' + name + ']'
 	}

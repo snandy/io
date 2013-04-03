@@ -1,7 +1,7 @@
 /*!
  * io.js v0.1.0
  * https://github.com/snandy/io
- * @snandy 2013-04-03 14:56:41
+ * @snandy 2013-04-03 17:09:55
  *
  */
 ~function(window, undefined) {
@@ -23,7 +23,7 @@ function forEach(obj, iterator, context) {
 }
 
 // IO.isArray, IO.isBoolean, ...
-forEach(['Array', 'Boolean', 'Function', 'Object', 'String', 'Number', 'RegExp'], function(name) {
+forEach(['Array', 'Boolean', 'Function', 'Object', 'String', 'Number'], function(name) {
 	IO['is' + name] = function(obj) {
 		return toString.call(obj) === '[object ' + name + ']'
 	}
@@ -130,7 +130,7 @@ function ajax(url, opt) {
 			}
 		}
 	}
-	xhr.open(method,url,async)
+	xhr.open(method, url, async)
 	if (credential) {
 		xhr.withCredentials = true
 	}

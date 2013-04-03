@@ -68,7 +68,7 @@ function ajax(url, opt) {
 			}
 		}
 	}
-	xhr.open(method,url,async)
+	xhr.open(method, url, async)
 	if (credential) {
 		xhr.withCredentials = true
 	}

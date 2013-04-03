@@ -1,7 +1,8 @@
 /*
- * 	XHRUpload.init(input, {
+ * 	XHRUpload(input, {
  *		// url: '/web/servlet/XHRUpload',
  *		url: '/upload',
+ * 		filePostName: 上传文件名 对应于后台的(默认 “file”)
  *		fileType: /(?:png|jpg|jpeg|gif)/,
  * 		credential: 跨域请求时是否带证书(默认false，不带http认证信息如cookie) 
  *		params: {
@@ -22,50 +23,53 @@
  *	}) 
  *
  */
-XHRUpload = function() {
-
-var guid = 0
+XHRUpload = function(input, settings) {
+	
 function noop() {}
 
 var exports = {
-	init: function(input, options) {
+	init: function(input, settings) {
 		var me = this
 		if (!input || input.nodeName !== 'INPUT') {
 			return
 		}
-		options || (options = {})
+		settings || (settings = {})
+		
+		this.guid = 0
+		this.xhrs = {}
 		// 上传按钮
 		this.input = input
 		// 上传url
-		this.url = options.url
+		this.url = settings.url
+		// 上传文件名 对应于后台的
+		this.filePostName = settings.filePostName || 'file'
 		// 请求参数，JS对象类型
-		this.params = options.params
+		this.params = settings.params
 		// 允许的单个文件大小 10M
-		this.maximize = options.maximize || 10 * 1024 * 1024
+		this.maximize = settings.maximize || 10 * 1024 * 1024
 		// 允许一次上传的文件数量
-		this.maximum  = options.maximum || 5
+		this.maximum  = settings.maximum || 5
 		// 允许上传的文件类型 正则
-		this.fileType = options.fileType || /\S/
+		this.fileType = settings.fileType || /\S/
 		// 跨域带证书
-		this.credential = options.credential
+		this.credential = settings.credential
 		// 进度函数
-		this.progress = options.progress || noop
+		this.progress = settings.progress || noop
 		// 成功函数
-		this.success  = options.success || noop
+		this.success  = settings.success || noop
 		// 失败函数
-		this.failure  = options.failure || noop
+		this.failure  = settings.failure || noop
 
-		this.checkMaximize = options.checkMaximize || noop
+		this.checkMaximize = settings.checkMaximize || noop
 
-		this.checkMaximun  = options.checkMaximun || noop
+		this.checkMaximun  = settings.checkMaximun || noop
 
-		this.checkFileType = options.checkFileType || noop
+		this.checkFileType = settings.checkFileType || noop
 		
-		this.fileQueued = options.fileQueued || noop
+		this.fileQueued = settings.fileQueued || noop
 
 		input.onchange = function(e) {
-			var i = 0,
-				files = this.files
+			var i = 0, files = this.files
 				
 			if (files.length > me.maximum) {
 				me.checkMaximun()
@@ -91,9 +95,10 @@ var exports = {
 					clearInterval(timer)
 					input.value = ''
 				} else {
-					file.id = guid++
+					file.id = me.guid++
 					me.fileQueued(file, xhr)
 					me.request(file, xhr)
+					me.xhrs[file.id] = xhr
 				}
 				i++
 			}
@@ -105,6 +110,7 @@ var exports = {
 			a1 = [],
 			a2 = [],
 			len = files.length
+			
 		for (var i=0; i<len; i++) {
 			file = files[i]
 			if (file.size > this.maximize) {
@@ -144,15 +150,20 @@ var exports = {
 		}
 		xhr.open('POST', me.url, true)
 		
-		var key, data = new FormData()
-		data.append('file', file)
+		var key, form = new FormData()
+		form.append(this.filePostName, file)
 		// params
 		for (key in params) {
-			data.append(key, params[key])
+			form.append(key, params[key])
 		}
-		xhr.send(data)
+		xhr.send(form)
+	},
+	cancel: function(fileId) {
+		this.xhrs[fileId].abort()
 	}
 }
 
+exports.init(input, settings)
 return exports
+
 };

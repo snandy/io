@@ -59,7 +59,6 @@ function serialize(obj) {
 			a.push(key + '=' + encodeURIComponent(val))
 		}
 	}
-	
 	return a.join('&')
 }
 
