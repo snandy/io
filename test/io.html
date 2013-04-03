@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html> 
+<head> 
+	<meta charset="utf-8"> 
+	<title>Ajax API by snandy</title>
+	<script src="../io.js"></script>
+</head> 
+<body>
+<input type="button" value="Get Name 1" onclick="clk1()"/>
+<input type="button" value="Get Name 2" onclick="clk2()"/>
+<input type="button" value="JSONP" onclick="clk3()"/>
+<script type="text/javascript">
+
+function clk1() {
+	IO.json('http://localhost:8081/web/servlet/Cors', {
+		data: {key: [1, 2, 3]},
+		success: function(str) {
+			console.log(str)
+		}
+	})
+}
+function clk2() {
+	IO.post({
+		// url: 'http://zgit/io/test/ajax.html',
+		url: 'http://localhost:8081/web/servlet/Cors',
+		data: {name:'backus', age:99},
+		success: function(data) {
+			console.log(data)
+		}
+	})
+}
+function clk3() {
+	IO.jsonp({
+		// url: 'http://zgit/io/test/ajax.html',
+		url: 'http://localhost:8081/web/servlet/Cors',
+		data: {name:'backus', age:99},
+		success: function(data) {
+			console.log(data)
+		}
+	})
+}
+</script>
+</body>
+</html>
+

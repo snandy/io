@@ -1,6 +1,6 @@
 /*
- * 	FileUpload.init(input, {
- *		// url: '/web/servlet/FileUpload',
+ * 	XHRUpload.init(input, {
+ *		// url: '/web/servlet/XHRUpload',
  *		url: '/upload',
  *		fileType: /(?:png|jpg|jpeg|gif)/,
  * 		credential: 跨域请求时是否带证书(默认false，不带http认证信息如cookie) 
@@ -22,50 +22,50 @@
  *	}) 
  *
  */
-FileUpload = function() {
+XHRUpload = function() {
 
 var guid = 0
 function noop() {}
 
 var exports = {
 	init: function(input, options) {
-		var me = this;
+		var me = this
 		if (!input || input.nodeName !== 'INPUT') {
 			return
 		}
-		options || (options = {});
+		options || (options = {})
 		// 上传按钮
-		this.input = input;
+		this.input = input
 		// 上传url
-		this.url = options.url;
+		this.url = options.url
 		// 请求参数，JS对象类型
-		this.params = options.params;
+		this.params = options.params
 		// 允许的单个文件大小 10M
-		this.maximize = options.maximize || 10 * 1024 * 1024;
+		this.maximize = options.maximize || 10 * 1024 * 1024
 		// 允许一次上传的文件数量
-		this.maximum  = options.maximum || 5;
+		this.maximum  = options.maximum || 5
 		// 允许上传的文件类型 正则
-		this.fileType = options.fileType || /\S/;
+		this.fileType = options.fileType || /\S/
 		// 跨域带证书
-		this.credential = options.credential;
+		this.credential = options.credential
 		// 进度函数
-		this.progress = options.progress || noop;
+		this.progress = options.progress || noop
 		// 成功函数
-		this.success  = options.success || noop;
+		this.success  = options.success || noop
 		// 失败函数
-		this.failure  = options.failure || noop;
+		this.failure  = options.failure || noop
 
-		this.checkMaximize = options.checkMaximize || noop;
+		this.checkMaximize = options.checkMaximize || noop
 
-		this.checkMaximun  = options.checkMaximun || noop;
+		this.checkMaximun  = options.checkMaximun || noop
 
-		this.checkFileType = options.checkFileType || noop;
+		this.checkFileType = options.checkFileType || noop
 		
-		this.fileQueued = options.fileQueued || noop;
+		this.fileQueued = options.fileQueued || noop
 
 		input.onchange = function(e) {
 			var i = 0,
-				files = this.files;
+				files = this.files
 				
 			if (files.length > me.maximum) {
 				me.checkMaximun()
@@ -82,20 +82,20 @@ var exports = {
 			}
 			
 			// 不要一个循环一次全部提交，间隔100ms，性能考虑，一次提交N多请求容易alort
-			var timer = setInterval(sched, 100);
+			var timer = setInterval(sched, 100)
 			function sched() {
 				var file = files[i],
-					xhr = new XMLHttpRequest();
+					xhr = new XMLHttpRequest()
 					
 				if (!file) {
-					clearInterval(timer);
-					input.value = '';
+					clearInterval(timer)
+					input.value = ''
 				} else {
-					file.id = guid++;
-					me.fileQueued(file, xhr);
-					me.request(file, xhr);
+					file.id = guid++
+					me.fileQueued(file, xhr)
+					me.request(file, xhr)
 				}
-				i++;
+				i++
 			}
 		}
 		return this

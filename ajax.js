@@ -79,8 +79,10 @@ function request(url, opt) {
 		scope      = opt.scope,
 		success    = opt.success || noop,
 		failure    = opt.failure || noop
-		
+	
+	// 大小写都行，但大写是匹配HTTP协议习惯	
 	method  = method.toUpperCase()
+	
 	// 对象转换成字符串键值对
 	if (data && typeof data === 'object') {
 		data = serialize(data)

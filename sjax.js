@@ -49,35 +49,37 @@ var ie678 = !-[1,],
 	opera = global.opera,
 	doc = global.document,
 	head = doc.head || doc.getElementsByTagName('head')[0],
-	timeout = 3000, done = false;
+	timeout = 3000,
+	done = false
 
-function paramsToString(obj) {
-	var a = [], key, val;
+function serialize(obj) {
+	var a = [], key, val
 	for (key in obj) {
-		val = obj[key];
+		val = obj[key]
 		if (val.constructor === Array) {
-			for(var i = 0, len = val.length; i < len; i++) {
-				a.push(key + '=' + encodeURIComponent(val[i]));
+			for (var i = 0, len = val.length; i<len; i++) {
+				a.push(key + '=' + encodeURIComponent( val[i]) )
 			}
 		} else {
-			a.push(key + '=' + encodeURIComponent(val));
+			a.push(key + '=' + encodeURIComponent(val))
 		}
-	}
-	return a.join('&');
+	}	
+	return a.join('&')
 }
+
 //Thanks to Kevin Hakanson
 //http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/873856#873856
 function generateRandomName() {
-	var uuid = '', s = [], i = 0, hexDigits = '0123456789ABCDEF';
+	var uuid = '', s = [], i = 0, hexDigits = '0123456789ABCDEF'
 	for (i = 0; i < 32; i++) {
-		s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+		s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1)
 	}
 	// bits 12-15 of the time_hi_and_version field to 0010
-	s[12] = '4';
+	s[12] = '4'
 	// bits 6-7 of the clock_seq_hi_and_reserved to 01	
-	s[16] = hexDigits.substr((s[16] & 0x3) | 0x8, 1);
-	uuid = 'jsonp_' + s.join('');
-	return uuid;
+	s[16] = hexDigits.substr((s[16] & 0x3) | 0x8, 1)
+	uuid = 'jsonp_' + s.join('')
+	return uuid
 }
 
 function noop() {}
@@ -86,13 +88,13 @@ var target = {
 	debug: false,
 	log: function(msg) {
 		if (global.console && this.debug) {
-			global.console.log(msg);
+			global.console.log(msg)
 		}
 	},
 	get: function(url, options) {
 		if (typeof url === 'object') {
-			options = url;
-			url = options.url;
+			options = url
+			url = options.url
 		}
 		var me      = this, 
 			url     = url + '?',
@@ -103,79 +105,79 @@ var target = {
 			scope   = options.scope || global,
 			timestamp = options.timestamp,
 			jsonpName = options.jsonpName || 'callback',
-			callbackName = options.jsonpCallback || generateRandomName();
+			callbackName = options.jsonpCallback || generateRandomName()
 		
 		if (param && typeof param === 'object') {
-			param = paramsToString(param);
+			param = serialize(param)
 		}
-		var script = doc.createElement('script');
+		var script = doc.createElement('script')
 		
 		function callback(isSucc) {
 			if (isSucc) {
-				done = true;
-				me.log('Request success!');
+				done = true
+				me.log('Request success!')
 			} else {
-				failure.call(scope);
-				me.log('Request failed!');
+				failure.call(scope)
+				me.log('Request failed!')
 			}
 			// Handle memory leak in IE
-			script.onload = script.onerror = script.onreadystatechange = null;
+			script.onload = script.onerror = script.onreadystatechange = null
 			if ( head && script.parentNode ) {
-				head.removeChild(script);
-				script = null;
-				global[callbackName] = undefined;
-				me.log("Garbage collecting!");
+				head.removeChild(script)
+				script = null
+				global[callbackName] = undefined
+				me.log("Garbage collecting!")
 			}
 		}
 		function fixOnerror() {
 			setTimeout(function() {
 				if (!done) {
-					callback();
+					callback()
 				}
-			}, timeout);
+			}, timeout)
 		}
 		if (ie678) {
 			script.onreadystatechange = function() {
 				var readyState = this.readyState;
 				if (!done && (readyState == 'loaded' || readyState == 'complete')) {
-					callback(true);
+					callback(true)
 				}
-			};
+			}
 			
 		} else {
 			script.onload = function() {
-				callback(true);
-			};
+				callback(true)
+			}
 			script.onerror = function() {
-				callback();
-			};
+				callback()
+			}
 			if (opera) {
-				fixOnerror();
+				fixOnerror()
 			}
 		}
 		
-		url += jsonpName + '=' + callbackName;
+		url += jsonpName + '=' + callbackName
 		
 		if (charset) {
-			script.charset = charset;
+			script.charset = charset
 		}
 		if (param) {
-			url += '&' + param;
+			url += '&' + param
 		}
 		if (timestamp) {
 			url += '&ts=';
-			url += (new Date).getTime();
+			url += (new Date).getTime()
 		}
 		
 		global[callbackName] = function(json) {
-			success.call(scope, json);
+			success.call(scope, json)
 		};
 		
 		this.log('Getting JSONP data');
-		script.src = url;
-		head.insertBefore(script, head.firstChild);
+		script.src = url
+		head.insertBefore(script, head.firstChild)
 	}
 }
 
-return target;
+return target
 }(this);
