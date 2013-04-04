@@ -10,8 +10,13 @@ var server = http.createServer(function(request, response) {
     response.writeHead(200, repsHeader);
 	var parts = url.parse(request.url,true);
 	console.log(parts.query);
-    // response.write('{name: "snandy"}');
-    response.write(parts.query.callback + '({name: "snandy"})');
+	
+	// json
+    response.write('{name: "snandy"}');
+    
+    // jsonp
+    // response.write(parts.query.callback + '({name: "snandy"})');
+    
     response.end();
 });
 server.listen(8081);

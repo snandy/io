@@ -1,7 +1,7 @@
 /*!
  * io.js v0.1.0
  * https://github.com/snandy/io
- * @snandy 2013-04-04 14:09:47
+ * @snandy 2013-04-04 15:12:11
  *
  */
 ~function(window, undefined) {
@@ -171,7 +171,8 @@ function onStateChange(xhr, type, success, failure, scope) {
 // exports to IO
 var options = {
 	method: ['get', 'post'],
-	type: ['text','json','xml']
+	type: ['text','json','xml'],
+	async: ['sync', 'async']
 }
 
 // Low-level Interface: IO.ajax
@@ -181,7 +182,7 @@ IO.ajax = ajax
 forEach(options, function(val, key) {
 	forEach(val, function(item, index) {
 		IO[item] = function(key, item) {
-			return function(url, opt, success, type) {
+			return function(url, opt, success) {
 				if ( IO.isObject(url) ) {
 					opt = url
 				}
@@ -191,6 +192,9 @@ forEach(options, function(val, key) {
 				if ( IO.isFunction(success) ) {
 					opt = {data: opt}
 					opt.success = success
+				}
+				if (key === 'async') {
+					item = item==='async' ? true : false
 				}
 				opt = opt || {}
 				opt[key] = item

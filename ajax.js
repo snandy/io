@@ -5,7 +5,7 @@
  * Ajax.request(url, {
  *	 async   	是否异步 true(默认)
  *	 method  	请求方式 POST or GET(默认)
- *	 type	  	数据格式 text(默认) or xml or json
+ *	 type	  	数据格式 json(默认) or xml or text
  *	 encode  	请求的编码 UTF-8(默认)
  *	 timeout 	请求超时时间 0(默认)
  *	 credential 跨域请求时是否带证书(默认false，不带http认证信息如cookie) 
@@ -33,6 +33,19 @@
 
 Ajax = function(window, undefined) {
 
+// parse json string
+function JSONParse(str) {
+	try {
+		return JSON.parse(str)
+	} catch(e) {
+		try {
+			return (new Function('return ' + str))()
+		} catch(e) {
+		}
+	}
+}
+
+// 
 var createXHR = window.XMLHttpRequest ?
 	function() {
 		try{
@@ -45,8 +58,10 @@ var createXHR = window.XMLHttpRequest ?
 		} catch(e){}
 	}
 
+// empty function
 function noop() {}
 
+// object to queryString
 function serialize(obj) {
 	var a = [], key, val
 	for (key in obj) {
@@ -62,22 +77,22 @@ function serialize(obj) {
 	return a.join('&')
 }
 
-function request(url, opt) {
+function request(url, options) {
 	if (typeof url === 'object') {
-		opt = url
-		url = opt.url
+		options = url
+		url = options.url
 	}
-	var xhr, isTimeout, timer, opt = opt || {}
-	var async      = opt.async !== false,
-		method     = opt.method  || 'GET',
-		type       = opt.type	  || 'text',
-		encode     = opt.encode  || 'UTF-8',
-		timeout    = opt.timeout || 0,
-		credential = opt.credential,
-		data	   = opt.data,
-		scope      = opt.scope,
-		success    = opt.success || noop,
-		failure    = opt.failure || noop
+	var xhr, isTimeout, timer, options = options || {}
+	var async      = options.async !== false,
+		method     = options.method  || 'GET',
+		type       = options.type    || 'json',
+		encode     = options.encode  || 'UTF-8',
+		timeout    = options.timeout || 0,
+		credential = options.credential,
+		data       = options.data,
+		scope      = options.scope,
+		success    = options.success || noop,
+		failure    = options.failure || noop
 	
 	// 大小写都行，但大写是匹配HTTP协议习惯	
 	method  = method.toUpperCase()
@@ -132,17 +147,7 @@ function onStateChange(xhr, type, success, failure, scope) {
 				result = xhr.responseText
 				break
 			case 'json':
-				result = function(str) {
-					try {
-						return JSON.parse(str)
-					} catch(e) {
-						try {
-							return (new Function('return ' + str))()
-						} catch(e) {
-							failure(xhr,'parse json error', e)
-						}
-					}
-				}(xhr.responseText)
+				result = JSONParse(xhr.responseText)
 				break
 			case 'xml':
 				result = xhr.responseXML
@@ -158,6 +163,7 @@ function onStateChange(xhr, type, success, failure, scope) {
 	xhr = null
 }
 
+// exports Ajax.text, Ajax.json, Ajax.xml
 return (function() {
 	var i, Ajax = {request: request}, types = ['text','json','xml']
 	for (i = 0, len = types.length; i<len; i++) {

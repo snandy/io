@@ -3,7 +3,7 @@
 <head> 
 	<meta charset="utf-8"> 
 	<title>Ajax API by snandy</title>
-	<script src="../io.src.js"></script>
+	<script src="../io.js"></script>
 	<script src="lib/selector.js"></script>
 </head> 
 <body>
@@ -16,14 +16,16 @@
 <script type="text/javascript">
 
 function clk1() {
-	// IO.json('http://localhost:8081', {
+	// IO.async('http://localhost:8081', {
 		// data: {key: [1, 2, 3]},
 		// type: 'text',
 		// success: function(str) {
 			// console.log(str)
 		// }
 	// })
-	IO.jsonp('http://localhost:8081')
+	IO.sync('http://localhost:8081', {key: '33'}, function(x){
+		console.log(x)
+	})
 }
 function clk2() {
 	IO.post({

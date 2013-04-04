@@ -5,7 +5,7 @@
 	IO.ajax(url, {
 		async      是否异步 true(默认)
 		method     请求方式 POST or GET(默认)
-		type       数据格式 json(默认) or xml or text
+		type       数据格式 json(默认) or xml, text
 		encode     请求的编码 UTF-8(默认)
 		timeout    请求超时时间 0(默认)
 		credential 跨域请求时是否带证书(默认false，不带http认证信息如cookie)
@@ -61,7 +61,21 @@
 	})
 	</pre>
 
-+ 简写
++ 同步请求
+	<pre>
+	IO.sync(url, {
+		...
+	})
+	</pre>
+	
++ 异步请求
+	<pre>
+	IO.async(url, {
+		...
+	})
+	</pre>
+		
++ 还有更简便的，总有一种满足您
 	<pre>
 	IO.get(url)
 	IO.get(url, success)
@@ -70,12 +84,16 @@
 	IO.post(url)
 	IO.post(url, success)
 	IO.post(url, data, success)
+	
+	IO.sync(url)
+	IO.sync(url, success)
+	IO.sync(url, data, success)
 	</pre>
 
 
 ## JSONP API
 
-+ 两个参数
++ 基本的JSONP请求
 	<pre>
 	IO.jsonp(url, {
 		param     // 请求参数 (键值对字符串或js对象)
@@ -87,20 +105,17 @@
 	})
 	</pre>
 	
-+ 一个参数
++ 也可只传一个配置对象
 	<pre>
 	IO.jsonp({
 		url       // 请求url 
 		param     // 请求参数 (键值对字符串或js对象)
 		success   // 请求成功回调函数
-		failure   // 请求失败回调函数
-		scope     // 回调函数执行上下文
-		timestamp // 是否加时间戳
-		jsonpCallback // 指定回调函数名称，不使用随机函数名，用在缓存时，此时timestamp应该设为false
+		...
 	})
 	</pre>
 	
-+ 简写
++ 还有更简便的，总有一种满足您
 	<pre>
 		IO.jsonp(url)
 		IO.jsonp(url, success)
