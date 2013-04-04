@@ -117,8 +117,8 @@
 	
 + 还有更简便的，总有一种满足您
 	<pre>
-		IO.jsonp(url)
-		IO.jsonp(url, success)
-		IO.jsonp(url, data, success)
+	IO.jsonp(url)
+	IO.jsonp(url, success)
+	IO.jsonp(url, data, success)
 	</pre>
 	
