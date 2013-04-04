@@ -32,9 +32,10 @@ function jsonp(url, options) {
 		options = url;
 		url = options.url;
 	}
+	var options = options || {}
 	var me      = this, 
 		url     = url + '?',
-		param   = options.param,
+		data    = options.data,
 		charset = options.charset,
 		success = options.success || noop,
 		failure = options.failure || noop,
@@ -43,8 +44,8 @@ function jsonp(url, options) {
 		jsonpName = options.jsonpName || 'callback',
 		callbackName = options.jsonpCallback || generateRandomName()
 	
-	if ( IO.isObject(param) ) {
-		param = serialize(param)
+	if ( IO.isObject(data) ) {
+		data = serialize(data)
 	}
 	var script = doc.createElement('script')
 	
@@ -94,8 +95,8 @@ function jsonp(url, options) {
 	if (charset) {
 		script.charset = charset
 	}
-	if (param) {
-		url += '&' + param
+	if (data) {
+		url += '&' + data
 	}
 	if (timestamp) {
 		url += '&ts='
@@ -110,6 +111,21 @@ function jsonp(url, options) {
 	head.insertBefore(script, head.firstChild)
 }
 
-IO.jsonp = jsonp
+// exports to IO
+IO.jsonp = function(url, opt, success) {
+	
+	if ( IO.isObject(url) ) {
+		opt = url
+	}
+	if ( IO.isFunction(opt) ) {
+		opt = {success: opt}
+	}
+	if ( IO.isFunction(success) ) {
+		opt = {data: opt}
+		opt.success = success
+	}
+	
+	return jsonp(url, opt)
+}
 
 }(IO)

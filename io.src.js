@@ -1,7 +1,7 @@
 /*!
  * io.js v0.1.0
  * https://github.com/snandy/io
- * @snandy 2013-04-03 17:09:55
+ * @snandy 2013-04-04 14:09:47
  *
  */
 ~function(window, undefined) {
@@ -79,22 +79,25 @@ var createXHR = window.XMLHttpRequest ?
 		} catch(e){}
 	}
 	
-function ajax(url, opt) {
+function ajax(url, options) {
 	if ( IO.isObject(url) ) {
-		opt = url
-		url = opt.url
+		options = url
+		url = options.url
 	}
-	var xhr, isTimeout, timer, opt = opt || {}
-	var async      = opt.async !== false,
-		method     = opt.method  || 'GET',
-		type       = opt.type	  || 'text',
-		encode     = opt.encode  || 'UTF-8',
-		timeout    = opt.timeout || 0,
-		credential = opt.credential,
-		data	   = opt.data,
-		scope      = opt.scope,
-		success    = opt.success || noop,
-		failure    = opt.failure || noop
+	if ( IO.isFunction(options) ) {
+		options = {success: options}
+	}
+	var xhr, isTimeout, timer, options = options || {}
+	var async      = options.async !== false,
+		method     = options.method  || 'GET',
+		type       = options.type    || 'json',
+		encode     = options.encode  || 'UTF-8',
+		timeout    = options.timeout || 0,
+		credential = options.credential,
+		data	   = options.data,
+		scope      = options.scope,
+		success    = options.success || noop,
+		failure    = options.failure || noop
 	
 	// 大小写都行，但大写是匹配HTTP协议习惯
 	method  = method.toUpperCase()
@@ -178,9 +181,16 @@ IO.ajax = ajax
 forEach(options, function(val, key) {
 	forEach(val, function(item, index) {
 		IO[item] = function(key, item) {
-			return function(url, opt) {
+			return function(url, opt, success, type) {
 				if ( IO.isObject(url) ) {
 					opt = url
+				}
+				if ( IO.isFunction(opt) ) {
+					opt = {success: opt}
+				}
+				if ( IO.isFunction(success) ) {
+					opt = {data: opt}
+					opt.success = success
 				}
 				opt = opt || {}
 				opt[key] = item
@@ -226,9 +236,10 @@ function jsonp(url, options) {
 		options = url;
 		url = options.url;
 	}
+	var options = options || {}
 	var me      = this, 
 		url     = url + '?',
-		param   = options.param,
+		data    = options.data,
 		charset = options.charset,
 		success = options.success || noop,
 		failure = options.failure || noop,
@@ -237,8 +248,8 @@ function jsonp(url, options) {
 		jsonpName = options.jsonpName || 'callback',
 		callbackName = options.jsonpCallback || generateRandomName()
 	
-	if ( IO.isObject(param) ) {
-		param = serialize(param)
+	if ( IO.isObject(data) ) {
+		data = serialize(data)
 	}
 	var script = doc.createElement('script')
 	
@@ -288,8 +299,8 @@ function jsonp(url, options) {
 	if (charset) {
 		script.charset = charset
 	}
-	if (param) {
-		url += '&' + param
+	if (data) {
+		url += '&' + data
 	}
 	if (timestamp) {
 		url += '&ts='
@@ -304,7 +315,22 @@ function jsonp(url, options) {
 	head.insertBefore(script, head.firstChild)
 }
 
-IO.jsonp = jsonp
+// exports to IO
+IO.jsonp = function(url, opt, success) {
+	
+	if ( IO.isObject(url) ) {
+		opt = url
+	}
+	if ( IO.isFunction(opt) ) {
+		opt = {success: opt}
+	}
+	if ( IO.isFunction(success) ) {
+		opt = {data: opt}
+		opt.success = success
+	}
+	
+	return jsonp(url, opt)
+}
 
 }(IO)
 

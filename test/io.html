@@ -3,7 +3,7 @@
 <head> 
 	<meta charset="utf-8"> 
 	<title>Ajax API by snandy</title>
-	<script src="../io.js"></script>
+	<script src="../io.src.js"></script>
 	<script src="lib/selector.js"></script>
 </head> 
 <body>
@@ -16,17 +16,19 @@
 <script type="text/javascript">
 
 function clk1() {
-	IO.json('http://localhost:8081/web/servlet/Cors', {
-		data: {key: [1, 2, 3]},
-		success: function(str) {
-			console.log(str)
-		}
-	})
+	// IO.json('http://localhost:8081', {
+		// data: {key: [1, 2, 3]},
+		// type: 'text',
+		// success: function(str) {
+			// console.log(str)
+		// }
+	// })
+	IO.jsonp('http://localhost:8081')
 }
 function clk2() {
 	IO.post({
-		// url: 'http://zgit/io/test/ajax.html',
-		url: 'http://localhost:8081/web/servlet/Cors',
+		url: 'http://zgit/io/test/ajax.html',
+		// url: 'http://localhost:8081/web/servlet/Cors',
 		data: {name:'backus', age:99},
 		success: function(data) {
 			console.log(data)
@@ -35,8 +37,8 @@ function clk2() {
 }
 function clk3() {
 	IO.jsonp({
-		// url: 'http://zgit/io/test/ajax.html',
-		url: 'http://localhost:8081/web/servlet/Cors',
+		url: 'http://zgit/io/test/ajax.html',
+		// url: 'http://localhost:8081/web/servlet/Cors',
 		data: {name:'backus', age:99},
 		success: function(data) {
 			console.log(data)
@@ -55,6 +57,12 @@ $('input[type=file]')[0].onchange = function() {
 	}
 }
 
+function test(opt) {
+	if ( opt.length ) {
+		opt = {success: opt}
+	}
+	console.log(opt)
+}
 </script>
 </body>
 </html>
