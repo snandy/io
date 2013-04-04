@@ -1,7 +1,7 @@
 /*!
  * io.js v0.1.0
  * https://github.com/snandy/io
- * @snandy 2013-04-04 15:12:11
+ * @snandy 2013-04-04 20:56:01
  *
  */
 ~function(window, undefined) {
@@ -339,6 +339,11 @@ IO.jsonp = function(url, opt, success) {
 }(IO)
 
 
-window.IO = IO
+// Expose IO to the global object or as AMD module
+if (typeof define === 'function' && define.amd) {
+	define('IO', [], function() { return IO } )
+} else {
+	window.IO = IO
+}
 
 }(this);
