@@ -1,7 +1,7 @@
 /*!
  * io.js v0.1.0
  * https://github.com/snandy/io
- * @snandy 2013-04-04 20:56:01
+ * @snandy 2013-04-06 18:40:24
  *
  */
 ~function(window, undefined) {
@@ -70,7 +70,7 @@ function noop() {}
 var createXHR = window.XMLHttpRequest ?
 	function() {
 		try{
-			return new window.XMLHttpRequest()
+			return new XMLHttpRequest()
 		} catch(e){}
 	} :
 	function() {

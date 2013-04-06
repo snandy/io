@@ -8,7 +8,7 @@
 var createXHR = window.XMLHttpRequest ?
 	function() {
 		try{
-			return new window.XMLHttpRequest()
+			return new XMLHttpRequest()
 		} catch(e){}
 	} :
 	function() {

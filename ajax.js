@@ -33,6 +33,19 @@
 
 Ajax = function(window, undefined) {
 
+// Iterator
+function forEach(obj, iterator, context) {
+	if ( obj.length === +obj.length ) {
+		for (var i=0; i<obj.length; i++) {
+			if (iterator.call(context, obj[i], i, obj) === true) return
+		}
+	} else {
+		for (var k in obj) {
+			if (iterator.call(context, obj[k], k, obj) === true) return
+		}
+	}
+}
+
 // parse json string
 function JSONParse(str) {
 	try {
@@ -45,11 +58,11 @@ function JSONParse(str) {
 	}
 }
 
-// 
+// create xhr object
 var createXHR = window.XMLHttpRequest ?
 	function() {
 		try{
-			return new window.XMLHttpRequest()
+			return new XMLHttpRequest()
 		} catch(e){}
 	} :
 	function() {
@@ -58,24 +71,23 @@ var createXHR = window.XMLHttpRequest ?
 		} catch(e){}
 	}
 
-// empty function
-function noop() {}
-
 // object to queryString
 function serialize(obj) {
-	var a = [], key, val
-	for (key in obj) {
-		val = obj[key]
-		if (val.constructor === Array) {
-			for (var i = 0, len = val.length; i<len; i++) {
-				a.push(key + '=' + encodeURIComponent( val[i]) )
-			}
+	var a = []
+	forEach(obj, function(val, key) {
+		if ( IO.isArray(val) ) {
+			forEach(val, function(v, i) {
+				a.push( key + '=' + encodeURIComponent(v) )
+			})
 		} else {
 			a.push(key + '=' + encodeURIComponent(val))
 		}
-	}
+	})
 	return a.join('&')
 }
+
+// empty function
+function noop() {}
 
 function request(url, options) {
 	if (typeof url === 'object') {
