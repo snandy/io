@@ -24,7 +24,21 @@
  *
  */
 XHRUpload = function(input, settings) {
-	
+
+// Iterator
+function forEach(obj, iterator, context) {
+	if ( obj.length === +obj.length ) {
+		for (var i=0; i<obj.length; i++) {
+			if (iterator.call(context, obj[i], i, obj) === true) return
+		}
+	} else {
+		for (var k in obj) {
+			if (iterator.call(context, obj[k], k, obj) === true) return
+		}
+	}
+}
+
+// empty function
 function noop() {}
 
 var exports = {
@@ -85,8 +99,8 @@ var exports = {
 				return
 			}
 			
-			// 不要一个循环一次全部提交，间隔100ms，性能考虑，一次提交N多请求容易alort
-			var timer = setInterval(sched, 100)
+			// 不要一个循环一次全部提交，间隔500ms，性能考虑，一次提交N多请求容易alort
+			var timer = setInterval(sched, 500)
 			function sched() {
 				var file = files[i],
 					xhr = new XMLHttpRequest()
@@ -106,20 +120,18 @@ var exports = {
 		return this
 	},
 	preprocess: function(files) {
-		var file,
-			a1 = [],
+		var a1 = [],
 			a2 = [],
-			len = files.length
+			type = this.fileType
 			
-		for (var i=0; i<len; i++) {
-			file = files[i]
+		forEach(files, function(file) {
 			if (file.size > this.maximize) {
 				a1.push(file)
 			}
-			if (!this.fileType.test(file.type)) {
+			if (!type.test(file.type)) {
 				a2.push(file)
 			}
-		}
+		})
 		return {sizes: a1, types: a2}
 	},
 	request: function(file, xhr) {
