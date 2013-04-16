@@ -29,7 +29,6 @@
 			
 			var loader:Loader = new Loader();
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onLoad);
-			
 			addChild(loader);
 			
 			ExternalInterface.addCallback('setBase64', setBase64);
@@ -105,10 +104,10 @@
 			var nextID = 0;
 			
 			addEventListener(MouseEvent.CLICK, function(e:MouseEvent) {
-					fileList = new FileReferenceList();
-					fileList.addEventListener(Event.SELECT, onSelect);
-					fileList.browse(filter);
-				});
+				fileList = new FileReferenceList();
+				fileList.addEventListener(Event.SELECT, onSelect);
+				fileList.browse(filter);
+			});
 			
 			function onSelect(e:Event) {
 				var tmp:Array = fileList.fileList;
