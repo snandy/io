@@ -1,0 +1,28 @@
+<!DOCTYPE HTML>
+<html> 
+<head> 
+	<meta charset="utf-8"> 
+	<title>Ajax API by snandy</title>
+	<script src="lib/selector.js"></script>
+	<script src="lib/e.js"></script>
+</head> 
+<body>
+
+<input type="file" multiple />
+
+<script type="text/javascript">
+	var input = $('input')[0]
+	E.on(input, 'change', function(e) {
+		var files = e.target.files;
+		var reader = new FileReader();
+		reader.readAsText(files[0]);
+		reader.onload = function() {
+			console.log(reader.result)
+		}
+		
+	})
+
+</script>
+</body>
+</html>
+

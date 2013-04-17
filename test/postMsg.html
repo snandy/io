@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html> 
+<head> 
+	<meta charset="utf-8"> 
+	<title>postMessage</title>
+	<script src="lib/selector.js"></script>
+</head> 
+<body>
+<input id="txt" />
+<input type="button" value="to iframe" onclick="sendIt1()"/>
+<input type="button" value="open window" onclick="openWin()"/>
+<input type="button" value="to open window" onclick="sendIt2()"/>
+<br/>
+<iframe id="otherPage" src="onMsg.html"></iframe>
+<script type="text/javascript">
+	// 也可以post JSON数据
+	var data = {key: 'xss', from: 'cross domain'};
+
+	// 给iframe所在window传数据
+	function sendIt1() { 
+		// 通过 postMessage 向子窗口发送数据
+		var childWin = $("#otherPage")[0].contentWindow;
+		var msg = $('#txt')[0].value;
+		childWin.postMessage(msg||data, "*");
+	}
+	
+	// 给打开的窗口传递数据
+	var win;
+	// 需要先打开窗口，间隔后再传数据
+	function openWin() {
+		win = window.open('onMsg.html', '', 'width=400, height=400');
+	}
+	function sendIt2() {
+		win.postMessage('open window data', "*");
+	}
+</script>
+
+</body>
+</html>
+
