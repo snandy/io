@@ -15,7 +15,6 @@ module.exports = function(grunt) {
 		
 		var str = '/*!\n';
 		str += ' * <%= pkg.name %>.js v<%= pkg.version %>\n';
-		str += ' * <%= pkg.repository.url %>\n';
 		str += ' * <%= pkg.author %> <%= grunt.template.today("yyyy-mm-dd") %> ' + time + '\n';
 		str += ' *\n'
 		str += ' */\n';
@@ -46,6 +45,7 @@ module.exports = function(grunt) {
 			}
 		}
 	});
+	
 	
 	// 载入concat和uglify插件，分别对于合并和压缩
 	grunt.loadNpmTasks('grunt-contrib-concat');
