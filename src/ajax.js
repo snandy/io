@@ -90,7 +90,7 @@
                     result = xhr.responseText
                     break
                 case 'json':
-                    result = JSONParse(xhr.responseText)
+                    result = parseJSON(xhr.responseText)
                     break
                 case 'xml':
                     result = xhr.responseXML

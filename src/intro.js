@@ -23,7 +23,7 @@ forEach(['Array', 'Boolean', 'Function', 'Object', 'String', 'Number'], function
     }
 })
 
-// object to queryString
+// Object to queryString
 function serialize(obj) {
     var a = []
     forEach(obj, function(val, key) {
@@ -38,18 +38,13 @@ function serialize(obj) {
     return a.join('&')
 }
 
-// parse json string
-function JSONParse(str) {
+// Parse json string
+var parseJSON = window.JSON ? window.JSON.parse : function(str) {
     try {
-        return JSON.parse(str)
-    } catch(e) {
-        try {
-            return (new Function('return ' + str))()
-        } catch(e) {
-        }
-    }
+        return (new Function('return ' + str))()
+    } catch (e) {}
 }
     
-// empty function
+// Empty function
 function noop() {}
 
