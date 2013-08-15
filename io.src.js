@@ -1,6 +1,6 @@
 /*!
  * io.js v0.1.0
- * @snandy 2013-08-15 16:36:18
+ * @snandy 2013-08-15 16:58:49
  *
  */
 ~function(window, undefined) {
@@ -28,7 +28,7 @@ forEach(['Array', 'Boolean', 'Function', 'Object', 'String', 'Number'], function
     }
 })
 
-// object to queryString
+// Object to queryString
 function serialize(obj) {
     var a = []
     forEach(obj, function(val, key) {
@@ -43,7 +43,7 @@ function serialize(obj) {
     return a.join('&')
 }
 
-// parse json string
+// Parse json string
 function parseJSON(str) {
     try {
         return JSON.parse(str)
@@ -55,7 +55,7 @@ function parseJSON(str) {
     }
 }
     
-// empty function
+// Empty function
 function noop() {}
 
 
