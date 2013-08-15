@@ -3,17 +3,28 @@
 <head> 
 	<meta charset="utf-8"> 
 	<title>Ajax API by snandy</title>
-	<script src="../ajax.js"></script>
+	<script src="../io.src.js"></script>
 </head> 
 <body>
 <input type="button" value="Get Name 1" onclick="clk1()"/>
 <input type="button" value="Get Name 2" onclick="clk2()"/>
 <script type="text/javascript">
-	Ajax.text('http://zgit/io/test/ajax.html', {
-		//url: 'http://zgit/io/test/ajax.html',
-		success: function(str) {
-			console.log(str)
-		}
+	// IO.text('http://zgit/io/test/ajax.html', {
+		// //url: 'http://zgit/io/test/ajax.html',
+		// success: function(str) {
+			// console.log(str)
+		// }
+	// })
+	var url = 'http://mysites/zgit/io/test/ajax.html'
+	var dataUrl = 'http://mysites/zgit/io/test/data.txt'
+	// get
+	IO.get(url, function(htm) {
+	    console.log(htm)
+	})
+	
+	// json
+	IO.json(dataUrl, function(obj) {
+	    console.log(obj)
 	})
 </script>
 </body>

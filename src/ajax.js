@@ -22,13 +22,10 @@
             options = url
             url = options.url
         }
-        if ( IO.isFunction(options) ) {
-            options = {success: options}
-        }
         var xhr, isTimeout, timer, options = options || {}
         var async      = options.async !== false,
             method     = options.method  || 'GET',
-            type       = options.type    || 'json',
+            type       = options.type    || 'text',
             encode     = options.encode  || 'UTF-8',
             timeout    = options.timeout || 0,
             credential = options.credential,
@@ -90,7 +87,7 @@
                     result = xhr.responseText
                     break
                 case 'json':
-                    result = JSONParse(xhr.responseText)
+                    result = parseJSON(xhr.responseText)
                     break
                 case 'xml':
                     result = xhr.responseXML
@@ -107,7 +104,7 @@
     }
     
     // exports to IO
-    var options = {
+    var api = {
         method: ['get', 'post'],
         type: ['text','json','xml'],
         async: ['sync', 'async']
@@ -117,7 +114,7 @@
     IO.ajax = ajax
     
     // Shorthand Methods: IO.get, IO.post, IO.text, IO.json, IO.xml
-    forEach(options, function(val, key) {
+    forEach(api, function(val, key) {
         forEach(val, function(item, index) {
             IO[item] = function(key, item) {
                 return function(url, opt, success) {

@@ -39,7 +39,7 @@ function serialize(obj) {
 }
 
 // parse json string
-function JSONParse(str) {
+function parseJSON(str) {
     try {
         return JSON.parse(str)
     } catch(e) {

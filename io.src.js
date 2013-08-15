@@ -1,6 +1,6 @@
 /*!
  * io.js v0.1.0
- * @snandy 2013-06-18 12:03:37
+ * @snandy 2013-08-15 16:36:18
  *
  */
 ~function(window, undefined) {
@@ -44,7 +44,7 @@ function serialize(obj) {
 }
 
 // parse json string
-function JSONParse(str) {
+function parseJSON(str) {
     try {
         return JSON.parse(str)
     } catch(e) {
@@ -83,13 +83,10 @@ function noop() {}
             options = url
             url = options.url
         }
-        if ( IO.isFunction(options) ) {
-            options = {success: options}
-        }
         var xhr, isTimeout, timer, options = options || {}
         var async      = options.async !== false,
             method     = options.method  || 'GET',
-            type       = options.type    || 'json',
+            type       = options.type    || 'text',
             encode     = options.encode  || 'UTF-8',
             timeout    = options.timeout || 0,
             credential = options.credential,
@@ -151,7 +148,7 @@ function noop() {}
                     result = xhr.responseText
                     break
                 case 'json':
-                    result = JSONParse(xhr.responseText)
+                    result = parseJSON(xhr.responseText)
                     break
                 case 'xml':
                     result = xhr.responseXML
@@ -168,7 +165,7 @@ function noop() {}
     }
     
     // exports to IO
-    var options = {
+    var api = {
         method: ['get', 'post'],
         type: ['text','json','xml'],
         async: ['sync', 'async']
@@ -178,7 +175,7 @@ function noop() {}
     IO.ajax = ajax
     
     // Shorthand Methods: IO.get, IO.post, IO.text, IO.json, IO.xml
-    forEach(options, function(val, key) {
+    forEach(api, function(val, key) {
         forEach(val, function(item, index) {
             IO[item] = function(key, item) {
                 return function(url, opt, success) {
@@ -212,26 +209,29 @@ function noop() {}
  */
 ~function(IO) {
     
-    var ie678 = !-[1,],
-        opera = window.opera,
-        doc = window.document,
-        head = doc.head || doc.getElementsByTagName('head')[0],
-        timeout = 3000, 
-        done = false
+    var ie678 = !-[1,]
+    var opera = window.opera
+    var doc = window.document
+    var head = doc.head || doc.getElementsByTagName('head')[0]
+    var timeout = 3000 
+    var done = false
     
     //Thanks to Kevin Hakanson
     //http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/873856#873856
     function generateRandomName() {
-        var uuid = '', s = [], i = 0, hexDigits = '0123456789ABCDEF';
+        var uuid = ''
+        var s = []
+        var i = 0
+        var hexDigits = '0123456789ABCDEF'
         for (i = 0; i < 32; i++) {
-            s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+            s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1)
         }
         // bits 12-15 of the time_hi_and_version field to 0010
-        s[12] = '4';
-        // bits 6-7 of the clock_seq_hi_and_reserved to 01    
-        s[16] = hexDigits.substr((s[16] & 0x3) | 0x8, 1);
-        uuid = 'jsonp_' + s.join('');
-        return uuid;
+        s[12] = '4'
+        // bits 6-7 of the clock_seq_hi_and_reserved to 01  
+        s[16] = hexDigits.substr((s[16] & 0x3) | 0x8, 1)
+        uuid = 'jsonp_' + s.join('')
+        return uuid
     }
     
     function jsonp(url, options) {
