@@ -47,15 +47,15 @@ function forEach(obj, iterator, context) {
 }
 
 // parse json string
-function JSONParse(str) {
-	try {
-		return JSON.parse(str)
-	} catch(e) {
-		try {
-			return (new Function('return ' + str))()
-		} catch(e) {
-		}
-	}
+function parseJSON(str) {
+    try {
+        return JSON.parse(str)
+    } catch(e) {
+        try {
+            return (new Function('return ' + str))()
+        } catch(e) {
+        }
+    }
 }
 
 // create xhr object
@@ -159,7 +159,7 @@ function onStateChange(xhr, type, success, failure, scope) {
 				result = xhr.responseText
 				break
 			case 'json':
-				result = JSONParse(xhr.responseText)
+				result = parseJSON(xhr.responseText)
 				break
 			case 'xml':
 				result = xhr.responseXML
