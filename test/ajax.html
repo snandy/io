@@ -8,6 +8,8 @@
 <body>
 <input type="button" value="Get Name 1" onclick="clk1()"/>
 <input type="button" value="Get Name 2" onclick="clk2()"/>
+<textarea id="area1"></textarea>
+<textarea id="area2"></textarea>
 <script type="text/javascript">
 	// IO.text('http://zgit/io/test/ajax.html', {
 		// //url: 'http://zgit/io/test/ajax.html',
@@ -15,16 +17,19 @@
 			// console.log(str)
 		// }
 	// })
-	var url = 'http://mysites/zgit/io/test/ajax.html'
-	var dataUrl = 'http://mysites/zgit/io/test/data.txt'
+	var url = '/io/test/ajax.html'
+	var dataUrl = '/io/test/data.txt'
+    var textarea1 = document.getElementById('area1')
+    var textarea2 = document.getElementById('area2')
 	// get
 	IO.get(url, function(htm) {
-	    console.log(htm)
+	    // alert(htm)
+        textarea1.value = htm
 	})
 	
 	// json
 	IO.json(dataUrl, function(obj) {
-	    console.log(obj)
+	    textarea2.value = obj.name
 	})
 </script>
 </body>

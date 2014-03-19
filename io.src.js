@@ -1,6 +1,6 @@
 /*!
  * io.js v0.1.0
- * @snandy 2013-08-15 16:58:49
+ * @snandy 2014-03-19 19:28:08
  *
  */
 ~function(window, undefined) {
@@ -10,7 +10,8 @@ var toString = Object.prototype.toString
 
 // Iterator
 function forEach(obj, iterator, context) {
-    if ( obj.length === +obj.length ) {
+    if (!obj) return 
+    if ( obj.length && obj.length === +obj.length ) {
         for (var i=0; i<obj.length; i++) {
             if (iterator.call(context, obj[i], i, obj) === true) return
         }
