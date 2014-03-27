@@ -1,6 +1,6 @@
 /*!
  * io.js v0.1.0
- * @snandy 2014-03-19 19:28:08
+ * @snandy 2014-03-27 14:21:41
  *
  */
 ~function(window, undefined) {
@@ -69,14 +69,10 @@ function noop() {}
     
     var createXHR = window.XMLHttpRequest ?
         function() {
-            try{
-                return new XMLHttpRequest()
-            } catch(e){}
+            return new XMLHttpRequest()
         } :
         function() {
-            try{
-                return new window.ActiveXObject('Microsoft.XMLHTTP')
-            } catch(e){}
+            return new window.ActiveXObject('Microsoft.XMLHTTP')
         }
         
     function ajax(url, options) {
@@ -157,7 +153,7 @@ function noop() {}
             }
             // text, 返回空字符时执行success
             // json, 返回空对象{}时执行suceess，但解析json失败，函数没有返回值时默认返回undefined
-            result !== undefined && success.call(scope, result)
+            result !== undefined && success.call(scope, result, s, xhr)
             
         } else {
             failure(xhr, xhr.status)
