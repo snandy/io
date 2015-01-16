@@ -120,10 +120,9 @@ var exports = {
 		return this
 	},
 	preprocess: function(files) {
-		var a1 = [],
-			a2 = [],
-			type = this.fileType
-			
+		var a1 = []
+		var a2 = []
+		var type = this.fileType
 		forEach(files, function(file) {
 			if (file.size > this.maximize) {
 				a1.push(file)
@@ -135,9 +134,8 @@ var exports = {
 		return {sizes: a1, types: a2}
 	},
 	request: function(file, xhr) {
-		var me = this, 
-			params = me.params;
-			
+		var me = this
+		var params = me.params
 		xhr.upload.onprogress = function(e) {
 			if (e.lengthComputable) {
 				me.progress(file, e.loaded, e.total)
