@@ -83,8 +83,8 @@ var exports = {
 		this.fileQueued = settings.fileQueued || noop
 
 		input.onchange = function(e) {
-			var i = 0, files = this.files
-				
+			var i = 0
+			var files = this.files
 			if (files.length > me.maximum) {
 				me.checkMaximun()
 				return
