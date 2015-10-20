@@ -5,10 +5,12 @@
 	<title>window.name方式跨域</title>
 </head> 
 <body>
-<input type="button" value="Get Name 1" onclick="clk1()"/>
-<input type="button" value="Get Name 2" onclick="clk2()"/>
+<p id="p1"></p>
 <script type="text/javascript">
-	alert(window.name);
+	// alert(window.name);
+	setTimeout(function() {
+		p1.innerHTML = window.name;
+	}, 2000)
 </script>
 </body>
 </html>

@@ -8,8 +8,11 @@
 <input type="button" value="Get Name 1" onclick="clk1()"/>
 <input type="button" value="Get Name 2" onclick="clk2()"/>
 <script type="text/javascript">
-	window.name = 'window.name1.html 的数据';
-	location.href = 'window.name2.html';
+	window.name = '来自 window.name1.html 的数据';
+	function clk1() {
+		// location.href = 'window.name2.html';	
+		location.href = 'http://snandy.sinaapp.com/window.name2.html';	
+	}
 </script>
 </body>
 </html>
