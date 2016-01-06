@@ -99,16 +99,16 @@ var target = {
 			options = url
 			url = options.url
 		}
-		var me      = this, 
-			url     = url + '?',
-			param   = options.param,
-			charset = options.charset,
-			success = options.success || noop,
-			failure = options.failure || noop,
-			scope   = options.scope || global,
-			timestamp = options.timestamp,
-			jsonpName = options.jsonpName || 'callback',
-			callbackName = options.jsonpCallback || generateRandomName()
+		var me      = this
+		var url     = url.indexOf('?') === -1 ? (url + '?') : (url + '&')
+		var param   = options.param
+		var charset = options.charset
+		var success = options.success || noop
+		var failure = options.failure || noop
+		var scope   = options.scope || global
+		var timestamp = options.timestamp
+		var jsonpName = options.jsonpName || 'callback'
+		var callbackName = options.jsonpCallback || generateRandomName()
 		
 		if (param && typeof param === 'object') {
 			param = serialize(param)

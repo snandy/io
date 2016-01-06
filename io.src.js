@@ -1,6 +1,6 @@
 /*!
  * io.js v0.1.0
- * @snandy 2014-03-27 14:21:41
+ * @snandy 2016-01-06 10:06:57
  *
  */
 ~function(window, undefined) {
@@ -207,14 +207,15 @@ function noop() {}
 ~function(IO) {
     
     var ie678 = !-[1,]
-    var opera = window.opera
-    var doc = window.document
+    var win = window
+    var opera = win.opera
+    var doc = win.document
     var head = doc.head || doc.getElementsByTagName('head')[0]
     var timeout = 3000 
     var done = false
     
-    //Thanks to Kevin Hakanson
-    //http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/873856#873856
+    // Thanks to Kevin Hakanson
+    // http://stackoverflow.com/questions/105034/how-to-create-a-guid-uuid-in-javascript/873856#873856
     function generateRandomName() {
         var uuid = ''
         var s = []
@@ -237,16 +238,16 @@ function noop() {}
             url = options.url;
         }
         var options = options || {}
-        var me      = this, 
-            url     = url + '?',
-            data    = options.data,
-            charset = options.charset,
-            success = options.success || noop,
-            failure = options.failure || noop,
-            scope   = options.scope || window,
-            timestamp = options.timestamp,
-            jsonpName = options.jsonpName || 'callback',
-            callbackName = options.jsonpCallback || generateRandomName()
+        var me      = this
+        var url     = url.indexOf('?') === -1 ? (url + '?') : (url + '&')
+        var data    = options.data
+        var charset = options.charset
+        var success = options.success || noop
+        var failure = options.failure || noop
+        var scope   = options.scope || win
+        var timestamp = options.timestamp
+        var jsonpName = options.jsonpName || 'callback'
+        var callbackName = options.jsonpCallback || generateRandomName()
         
         if ( IO.isObject(data) ) {
             data = serialize(data)
@@ -264,7 +265,7 @@ function noop() {}
             if ( head && script.parentNode ) {
                 head.removeChild(script)
                 script = null
-                window[callbackName] = undefined
+                win[callbackName] = undefined
             }
         }
         function fixOnerror() {
@@ -307,7 +308,7 @@ function noop() {}
             url += (new Date).getTime()
         }
         
-        window[callbackName] = function(json) {
+        win[callbackName] = function(json) {
             success.call(scope, json)
         };
         
