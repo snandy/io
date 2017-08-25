@@ -197,9 +197,9 @@ return (function() {
  * 1 使用新API解析JSON，对解析JSON出现可能出现的异常进行了处理
  * 2 超时处理做了修改，先给isTimeout赋值，再调用abort（不采用条件status==0指定超时）
  * 3 XHR创建方式修改（勿重复检测浏览器http://www.cnblogs.com/snandy/archive/2011/05/24/2055048.html）
- * 4 增加scope参数，success可指定上下文
- * 5 接口方式修改，增加get，post方法
- * 6 XHR2跨域实现带认证信息如cookie 后台需返回两个header （注意：目前最新Firefox/Chrome/Safari/Opera/IE10均支持）
+ * 4 增加 scope 参数，success可指定上下文
+ * 5 接口方式修改，增加 get，post方法
+ * 6 XHR2跨域实现带认证信息如 cookie 后台需返回两个 header （注意：目前最新Firefox/Chrome/Safari/Opera/IE10均支持）
  * 	Access-Control-Allow-Origin: http://xxx.com
  * 	Access-Control-Allow-Credentials: true
  *  如果带认证信息，xhr设置 xhr.withCredentials = true;
