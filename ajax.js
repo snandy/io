@@ -1,6 +1,6 @@
 /**
  * JavaScript Ajax tool
- * 
+ *
  * 1,执行基本ajax请求,返回XMLHttpRequest
  * Ajax.request(url, {
  *	 async   	是否异步 true(默认)
@@ -8,23 +8,23 @@
  *	 type	  	数据格式 json(默认) or xml or text
  *	 encode  	请求的编码 UTF-8(默认)
  *	 timeout 	请求超时时间 0(默认)
- *	 credential 跨域请求时是否带证书(默认false，不带http认证信息如cookie) 
+ *	 credential 跨域请求时是否带证书(默认false，不带http认证信息如cookie)
  *	 data	  	请求参数 (字符串或json)
  *	 scope   	成功回调执行上下文
  *	 success 	请求成功后响应函数 参数为text,json,xml数据
  *	 failure 	请求失败后响应函数 参数为xmlHttp, msg, exp
  * });
- * 
+ *
  * 2,执行ajax请求,返回纯文本
  * Ajax.text(url,{
  *		 ...
  * });
- * 
+ *
  * 3,执行ajax请求,返回JSON
  * Ajax.json(url,{
  *		 ...
  * });
- * 
+ *
  * 4,执行ajax请求,返回XML
  * Ajax.xml(url,{
  *		 ...
@@ -105,10 +105,10 @@ function request(url, options) {
 		scope      = options.scope,
 		success    = options.success || noop,
 		failure    = options.failure || noop
-	
-	// 大小写都行，但大写是匹配HTTP协议习惯	
+
+	// 大小写都行，但大写是匹配HTTP协议习惯
 	method  = method.toUpperCase()
-	
+
 	// 对象转换成字符串键值对
 	if (data && typeof data === 'object') {
 		data = serialize(data)
@@ -116,12 +116,12 @@ function request(url, options) {
 	if (method === 'GET' && data) {
 		url += (url.indexOf('?') === -1 ? '?' : '&') + data
 	}
-	
+
 	xhr = createXHR()
 	if (!xhr) {
 		return
 	}
-	
+
 	isTimeout = false
 	if (async && timeout>0) {
 		timer = setTimeout(function() {
@@ -168,7 +168,7 @@ function onStateChange(xhr, type, success, failure, scope) {
 		// text, 返回空字符时执行success
 		// json, 返回空对象{}时执行suceess，但解析json失败，函数没有返回值时默认返回undefined
 		result !== undefined && success.call(scope, result)
-		
+
 	} else {
 		failure(xhr, xhr.status)
 	}
@@ -192,7 +192,6 @@ return (function() {
 
 }(this);
 
-
 /*******************************************************************************************************
  *
  * 1 使用新API解析JSON，对解析JSON出现可能出现的异常进行了处理
@@ -207,5 +206,5 @@ return (function() {
  * 	详见：
  * 		https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS
  * 		http://enable-cors.org/client.html
- * 
+ *
  *******************************************************************************************************/
